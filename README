@@ -1,0 +1,76 @@
+Copyright 2021 Sturzoiu Ioan-Teofil Grupa 311CA
+ioan.teofil2002@gmail.com
+
+Homework No. 2
+==============
+
+During this homework 17 functions were used to solve all tasks.
+
+The my_octave.c program is using dynamic memory allocation to solve given
+tasks regarding a 3D matrix / array of matrices. Prior to explaining the
+solution, I have to state some names for used variables:
+
+-> all_matrices is the array of stored matrices (which memorizes on each
+   position a pointer to a certain matrix)
+-> matrices_dim is the array of type "dimensions" (which memorizes on each
+   position: number of rows, number of columns and sum of all elements inside
+   the matrix)
+-> nr_matrices is a variable of int type which memorizes and updates during the
+   execution the number of stored matrices in "all_matrices"
+-> 'c' is a variable of char type I use for reading the given input:
+	a) one valid command at a time: L, D, P, C, M, O, T, F, S
+	b) unrecognized command
+	
+	
+Describing the solution:
+~~~~~~~~~~~~~~~~~~~~~~~~
+In the code, I use getc() function to read the input. It reads one command at
+a time and then calls the needed function for solving the task:
+	a) load_matrix() for case 'L'
+	b) print_dimensions() for case 'D'
+	... and so on (names of functions are in correlation with the name of
+	the specific task)
+The content of each function is mainly based on simple requests (e.g.: printing
+the matrix with the given index or its dimensions) and the use of other
+functions to simplify the work (read_matrix, alloc_matrix, free_matrix, ...).
+
+Each defined function has the code punctually explained inside the source.
+The only tasks I feel like diving into are:
+-> RESIZE (coded as 'C'):
+	a) I read the given input (number of resized rows and columns plus
+	   their indices).
+	b) After checking if the index is correct, I initialize and
+	   allocate memory for a matrix with the new given dimensions
+	c) I copy all the elements in the new resized matrix
+	d) I calculate the sum of elements inside the new matrix and store it
+	   with the dimensions in the "matrices_dim" array.
+	e) I free the memory used for the old matrix (which I find at index
+	   "position" inside the array "all_matrices")
+	f) I free the memory used for storing indices of rows and columns
+	   given in the input.
+-> REMOVE (coded as 'F'):
+	a) I read the given input (one index)
+	b) After checking if the index is correct, I free the memory used for
+	   storing the matrix at the given "position" in "all_matrices" array
+	c) I move all matrices starting from the given position one step to
+	   the left
+	d) Last pointer stored in "all_matrices" will now be NULL as I moved
+	   the element which was previously stored there
+	e) I update the dimensions and allocated memory for arrays.
+-> STRASSEN (coded as 'S') - bonus:
+	Implies multiplying 2 matrices using Strassen's algorithm.
+	The algorithm itself is easy to understand, the big challenge was
+	implementing functions for each step and being able to free
+	auxiliary memory used during the recursive solution.
+	All the comments inside the code are more than enough to help
+	you understand the implementation I wrote.
+	
+Last clarification I have to make is why I stored the sum of elements for
+each matrix inside the array of structs (matrices_dim).
+The reason is pretty clear, I stored it as to spare some execution time
+for the SORTING task (coded as 'O'). Instead of parsing through each matrix
+multiple times to calculate sum, I chose to use 4 more bytes 
+(sizeof int = space needed for storing the sum calculated when reading 
+the matrix) for every matrix.
+I know the sorting algorithm is rudimentary, but there was no execution
+time limit.
